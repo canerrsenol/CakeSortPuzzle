@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class GridBase : MonoSingleton<GridBase>
 {
-    [SerializeField] private Vector2Int gridSize;
-    [SerializeField] private float tileSize;
+    [SerializeField, HideInInspector] private Vector2Int gridSize;
+    [SerializeField, HideInInspector] private float tileSize;
     public float TileSize => tileSize;
-    
     private Tile[,] tilesArray;
 
     protected void Awake()
