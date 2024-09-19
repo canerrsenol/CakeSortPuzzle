@@ -6,17 +6,6 @@ public class Tile : MonoBehaviour
     
     private ITileObject tileObject;
     
-    private Material material;
-    
-    [SerializeField] private Color emptyColor;
-    
-    [SerializeField] private Color occupiedColor;
-    
-    private void Awake()
-    {
-        material = GetComponentInChildren<MeshRenderer>().material;
-    }
-    
     public void SetTilePosition(TilePosition tilePosition)
     {
         this.tilePosition = tilePosition;
@@ -29,7 +18,6 @@ public class Tile : MonoBehaviour
     
     public void SetTileObject(ITileObject tileObject)
     {
-        material.color = tileObject == null ? emptyColor : occupiedColor;
         this.tileObject = tileObject;
     }
     
