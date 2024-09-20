@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GreenCakeSlice
   m_EditorClassIdentifier: 
   cakeSlicePrefab: {fileID: 5786206181165918547, guid: dea3925f490dccd468364bfa28dcc2a5, type: 3}
+  cakeSliceType: 1

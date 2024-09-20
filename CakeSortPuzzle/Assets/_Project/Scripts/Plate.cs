@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -55,6 +56,108 @@ public class Plate : MonoBehaviour, IDraggable
         }
 
         return true;
+    }
+
+    public List<CakeSlice> GetAllCakeSlicesOfTargetType(CakeSliceType cakeSliceType)
+    {
+        List<CakeSlice> cakeSlices = new List<CakeSlice>();
+        for (int i = 0; i < this.cakeSlices.Length; i++)
+        {
+            if (this.cakeSlices[i] == null) continue;
+            if (this.cakeSlices[i].CakeSliceType == cakeSliceType)
+            {
+                cakeSlices.Add(this.cakeSlices[i]);
+            }
+        }
+
+        return cakeSlices;
+    }
+
+    public bool HasEmptySlot()
+    {
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == null) return true;
+        }
+
+        return false;
+    }
+
+    public void AddCakeSlice(CakeSlice cakeSlice)
+    {
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == null)
+            {
+                cakeSlices[i] = cakeSlice;
+                cakeSlice.transform.SetParent(transform);
+                return;
+            }
+        }
+    }
+
+    public void RemoveCakeSlice(CakeSlice cakeSlice)
+    {
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == cakeSlice)
+            {
+                cakeSlices[i] = null;
+                return;
+            }
+        }
+    }
+
+    public void ReorderCakeSlices()
+    {
+        if (cakeSlices.All(cakeSlice => cakeSlice == null))
+        {
+            var gridManager = GridManager.Instance;
+            var tilePosition = gridManager.GetTilePosition(transform.position);
+            gridManager.GetTile(tilePosition).SetTileObject(null);
+            Destroy(gameObject);
+            return;
+        }
+
+        // 1. CakeSlice nesnelerini türlerine göre gruplandır ve sıralı bir liste oluştur
+        var groupedCakeSlices = cakeSlices
+            .Where(cakeSlice => cakeSlice != null)
+            .OrderBy(cakeSlice => cakeSlice.CakeSliceType)
+            .ToList();
+
+        // 2. Bu listeyi cakeSlices dizisine yeniden yerleştir
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (i < groupedCakeSlices.Count)
+            {
+                cakeSlices[i] = groupedCakeSlices[i];
+            }
+            else
+            {
+                cakeSlices[i] = null;
+            }
+        }
+
+        // 3. Her bir CakeSlice nesnesinin pozisyonunu ve rotasyonunu kontrol et ve DoTween kullanarak ayarla
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            var cakeSlice = cakeSlices[i];
+            if (cakeSlice != null)
+            {
+                // Pozisyonu kontrol et ve ayarla
+                if (cakeSlice.transform.localPosition != Vector3.zero)
+                {
+                    cakeSlice.transform.DOLocalMove(Vector3.zero, 1f).SetEase(Ease.Linear);
+                }
+
+                // Rotasyonu kontrol et ve ayarla
+                Quaternion targetRotation = Quaternion.Euler(Vector3.up * 45f * i);
+                if (cakeSlice.transform.localRotation != targetRotation)
+                {
+                    cakeSlice.transform.DOLocalRotateQuaternion(targetRotation, 1f).SetEase(Ease.Linear);
+                }
+            }
+        }
     }
 
     public void OnDrag(Vector3 targetPosition)

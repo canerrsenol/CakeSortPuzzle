@@ -1780,6 +1780,7 @@ GameObject:
   - component: {fileID: 2028843639}
   - component: {fileID: 2028843641}
   - component: {fileID: 2028843642}
+  - component: {fileID: 2028843643}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1876,6 +1877,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   victoryPanel: {fileID: 1886600963}
   losePanel: {fileID: 1990669352}
+--- !u!114 &2028843643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028843636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1039199e406eb4dad60400086789ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalEventsSO: {fileID: 11400000, guid: db0bdee4f5536a34eb669e9a074321b7, type: 2}
 --- !u!1 &2046360946
 GameObject:
   m_ObjectHideFlags: 0

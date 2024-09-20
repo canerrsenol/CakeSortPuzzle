@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MergeManager : MonoBehaviour
+public class MergeController : MonoBehaviour
 {
     [SerializeField] private GlobalEventsSO globalEventsSO;
 
@@ -29,12 +28,40 @@ public class MergeManager : MonoBehaviour
         Plate currentPlate = checkTiles.Peek().GetTileObject().GetComponent<Plate>();
         var neighbourPlates = GetNeighbourList(checkTiles.Peek());
 
-        
+        CakeSliceType currentCakeType = currentPlate.GetAllCakeSliceTypes()[0];
+        Plate targetPlate = null;
+
+        for(int i=0; i<neighbourPlates.Count; i++)
+        {
+            if(neighbourPlates[i].IsPlateAllSameType()) continue;
+            if(neighbourPlates[i].GetAllCakeSliceTypes()[0] == currentCakeType)
+            {
+                targetPlate = neighbourPlates[i];
+                Merge(currentPlate, targetPlate, currentCakeType);
+                break;
+            }
+        }
     }
 
-    private void Update()
+    private void Merge(Plate currentPlate, Plate targetPlate, CakeSliceType cakeSliceType)
     {
-        
+        List<CakeSlice> cakeSlices = currentPlate.GetAllCakeSlicesOfTargetType(cakeSliceType);
+
+        for(int i=0; i<cakeSlices.Count; i++)
+        {
+            if(targetPlate.HasEmptySlot())
+            {
+                targetPlate.AddCakeSlice(cakeSlices[i]);
+                currentPlate.RemoveCakeSlice(cakeSlices[i]);
+            }
+            else
+            {
+                return;
+            }
+
+            currentPlate.ReorderCakeSlices();
+            targetPlate.ReorderCakeSlices();
+        }
     }
 
     private List<Plate> GetNeighbourList(Tile currentTile)
