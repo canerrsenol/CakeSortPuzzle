@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c73551fb7e5a94893a69fbe0eb5856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalEvents: {fileID: 11400000, guid: db0bdee4f5536a34eb669e9a074321b7, type: 2}
   conveyorPoints:
   - {fileID: 248467532}
   - {fileID: 1766372916}

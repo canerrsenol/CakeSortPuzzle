@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49de076f2e52d1d4681584fb5d5d5aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalEventsSO: {fileID: 11400000, guid: db0bdee4f5536a34eb669e9a074321b7, type: 2}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
