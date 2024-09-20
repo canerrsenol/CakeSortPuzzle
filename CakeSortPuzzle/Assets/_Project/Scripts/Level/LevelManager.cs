@@ -1,100 +1,66 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 public class LevelManager : MonoSingleton<LevelManager>
 {
-    private int currentContentIndex;
     private int levelNumber;
     private LevelDetailSO currentLevelDetail;
     public LevelDetailSO CurrentLevelDetail => currentLevelDetail;
     [SerializeField] private LevelDetailSO[] levelList;
+    private GameObject levelContent;
+    public GameObject LevelContent => levelContent;
 
     private void Start()
     {
-        InstanceLevel();
+        CreateLevel();
     }
 
-    private void InstanceLevel()
+    private void CreateLevel()
     {
-        LoadLevelDatas();
+        LoadLevelData();
         CreateContent();
-    }
 
-    private void Update()
-    {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            NextLevelContentAction();
-            UpgradeLevelNumberIndex(1, true);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-#endif
+        GameManager.Instance.ChangeGameState(GameState.Loaded);
     }
 
     public void LoadCurrentLevel()
     {
+        DestroyOldContent();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadNextLevel()
     {
-        NextLevelContentAction();
-        UpgradeLevelNumberIndex(1, true);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        UpgradeLevelNumber();
+        DestroyOldContent();
+        CreateContent();
     }
 
-    public void NextLevelContentAction()
+    private void DestroyOldContent()
     {
-        UpgradeContentIndex();
-        SaveLevelDatas();
+        if (levelContent != null)
+            Destroy(levelContent);
     }
 
-    private void LoadLevelDatas()
+    public void UpgradeLevelNumber()
     {
-        // load level number from PlayerPrefs
+        levelNumber++;
+        SaveLevelData();
+    }
+
+    private void LoadLevelData()
+    {
         levelNumber = PlayerPrefs.GetInt("LevelNumber", 1);
-        // load level index from PlayerPrefs
-        currentContentIndex = PlayerPrefs.GetInt("LevelIndex", 0);
     }
 
-    private void SaveLevelDatas()
+    private void SaveLevelData()
     {
-        // save level number to PlayerPrefs
         PlayerPrefs.SetInt("LevelNumber", levelNumber);
-        // save level index to PlayerPrefs
-        PlayerPrefs.SetInt("LevelIndex", currentContentIndex);
     }
 
     private void CreateContent()
     {
-        print(currentContentIndex);
-        currentLevelDetail = levelList[currentContentIndex];
-        Instantiate(currentLevelDetail.LevelPrefab, transform);
-    }
-
-    public void UpgradeLevelNumberIndex(int index, bool isSaveGame)
-    {
-        levelNumber += index;
-        if (isSaveGame)
-        {
-            SaveLevelDatas();
-        }
-    }
-
-    private void UpgradeContentIndex()
-    {
-        if (currentContentIndex < levelList.Length - 1) currentContentIndex++;
-        else currentContentIndex = RandomIndex(currentContentIndex);
-    }
-
-    private int RandomIndex(int currentIndexNumber)
-    {
-        while (true)
-        {
-            var returnIndex = Random.Range(0, levelList.Length);
-            if (returnIndex != currentIndexNumber) return returnIndex;
-        }
+        currentLevelDetail = levelList[levelNumber%levelList.Length - 1];
+        levelContent = Instantiate(currentLevelDetail.LevelPrefab, transform);
     }
 }

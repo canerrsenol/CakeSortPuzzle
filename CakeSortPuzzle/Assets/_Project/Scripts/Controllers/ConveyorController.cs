@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class ConveyorController : MonoBehaviour
@@ -10,6 +11,13 @@ public class ConveyorController : MonoBehaviour
 
     private LevelDetailSO levelData;
 
+    private LevelManager levelManager;
+
+    private void Awake()
+    {
+        levelManager = LevelManager.Instance;
+    }
+
     private void OnEnable()
     {
         GameManager.Instance.OnGameStateChanged += OnGameStateChanged;
@@ -17,6 +25,7 @@ public class ConveyorController : MonoBehaviour
 
     private void OnDisable()
     {
+        if(GameManager.Instance == null) return;
         GameManager.Instance.OnGameStateChanged -= OnGameStateChanged;
     }
 
@@ -24,8 +33,8 @@ public class ConveyorController : MonoBehaviour
     {
         if (gameState == GameState.Loaded)
         {
-            levelData = LevelManager.Instance.CurrentLevelDetail;
-            SpawnPlates();
+            levelData = levelManager.CurrentLevelDetail;
+            DOVirtual.DelayedCall(1f , SpawnPlates);
         }
     }
 
@@ -34,7 +43,7 @@ public class ConveyorController : MonoBehaviour
         for (int i = 0; i < spawnCycle; i++)
         {
             if(currentSpawnIndex >= levelData.LevelPlates.Count) return;
-            Plate plate = Instantiate(platePrefab, spawnPoint.position, Quaternion.identity);
+            Plate plate = Instantiate(platePrefab, spawnPoint.position, Quaternion.identity, levelManager.LevelContent.transform);
             plate.InitializePlate(levelData.LevelPlates[currentSpawnIndex], conveyorPoints[i].position);
             currentSpawnIndex++;
         }

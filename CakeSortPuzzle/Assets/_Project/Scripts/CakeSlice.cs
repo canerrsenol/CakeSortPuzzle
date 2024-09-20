@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CakeSlice : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private CakeSliceType cakeSliceType;
 
-    // Update is called once per frame
-    void Update()
+    public CakeSliceType CakeSliceType => cakeSliceType;
+
+    public void SetCakeSliceType(CakeSliceType cakeSliceType)
     {
-        
+        this.cakeSliceType = cakeSliceType;
     }
+}
+
+public enum CakeSliceType
+{
+    Blue,
+    Green,
+    Red
 }

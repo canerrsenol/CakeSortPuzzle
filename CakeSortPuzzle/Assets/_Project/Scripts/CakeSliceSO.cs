@@ -4,4 +4,8 @@ using UnityEngine;
 public class CakeSliceSO : ScriptableObject
 {
     public GameObject cakeSlicePrefab;
+
+    public CakeSliceType cakeSliceType;
+
+
 }

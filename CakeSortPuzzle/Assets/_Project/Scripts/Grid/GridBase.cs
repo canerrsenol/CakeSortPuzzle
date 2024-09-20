@@ -77,7 +77,7 @@ public class GridBase : MonoSingleton<GridBase>
         return tilesArray[tilePosition.x, tilePosition.z];
     }
     
-    public bool IsValidGridPosition(TilePosition tilePosition)
+    public bool IsValidTilePosition(TilePosition tilePosition)
     {
         return tilePosition.x >= 0 &&
                tilePosition.x < gridSize.x && 

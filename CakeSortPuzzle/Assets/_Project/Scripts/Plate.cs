@@ -5,26 +5,29 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
 {
     [SerializeField] private LayerMask groundLayer;
 
-    [SerializeField] private PlateData plateData;
-
     private Vector3 initialPosition;
 
     public bool CanDrag { get; set; } = true;
 
+    private CakeSlice[] cakeSlices = new CakeSlice[8];
+
     public void InitializePlate(PlateData plateData, Vector3 initialPosition)
     {
-        this.plateData = plateData;
         this.initialPosition = initialPosition;
         transform.DOMove(initialPosition, 0.25f);
-        SpawnCakeSlices();
+        SpawnCakeSlices(plateData);
     }
 
-    private void SpawnCakeSlices()
+    private void SpawnCakeSlices(PlateData plateData)
     {
         for (int i = 0; i < plateData.cakeSlices.Length; i++)
         {
             if(plateData.cakeSlices[i] == null) continue;
-            Instantiate(plateData.cakeSlices[i], Vector3.zero, Quaternion.Euler(Vector3.up * 45f * i),  transform);
+            GameObject cakeSlice = Instantiate(plateData.cakeSlices[i].cakeSlicePrefab, Vector3.zero, Quaternion.Euler(Vector3.up * 45f * i), transform);
+            cakeSlice.transform.localPosition = Vector3.zero;
+            
+            cakeSlices[i] = cakeSlice.GetComponent<CakeSlice>();
+            cakeSlices[i].SetCakeSliceType(plateData.cakeSlices[i].cakeSliceType);
         }
     }
 
@@ -45,6 +48,10 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
             var gridBaseInstance = GridBase.Instance;
 
             var tilePosition = gridBaseInstance.GetTilePosition(hit.point);
+            if(!gridBaseInstance.IsValidTilePosition(tilePosition)){
+                transform.DOMove(initialPosition, 0.25f).OnComplete(() => CanDrag = true);
+                return;
+            } 
             var tile = gridBaseInstance.GetTile(tilePosition);
 
             if(tile.IsTileEmpty())
