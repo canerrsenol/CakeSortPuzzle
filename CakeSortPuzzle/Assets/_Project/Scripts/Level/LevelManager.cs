@@ -4,12 +4,11 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoSingleton<LevelManager>
 {
-    public int currentContentIndex;
-
-    public LevelDetailSO currentLevelDetail;
-    public LevelDetailSO[] levelList;
-
-    public int levelNumber;
+    private int currentContentIndex;
+    private int levelNumber;
+    private LevelDetailSO currentLevelDetail;
+    public LevelDetailSO CurrentLevelDetail => currentLevelDetail;
+    [SerializeField] private LevelDetailSO[] levelList;
 
     private void Start()
     {

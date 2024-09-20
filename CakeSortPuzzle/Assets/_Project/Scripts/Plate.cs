@@ -5,25 +5,35 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
 {
     [SerializeField] private LayerMask groundLayer;
 
+    [SerializeField] private PlateData plateData;
+
     private Vector3 initialPosition;
 
     public bool CanDrag { get; set; } = true;
 
-    public void SetInitialPosition(Vector3 initialPosition)
+    public void InitializePlate(PlateData plateData, Vector3 initialPosition)
     {
+        this.plateData = plateData;
         this.initialPosition = initialPosition;
+        transform.DOMove(initialPosition, 0.25f);
+        SpawnCakeSlices();
+    }
+
+    private void SpawnCakeSlices()
+    {
+        for (int i = 0; i < plateData.cakeSlices.Length; i++)
+        {
+            if(plateData.cakeSlices[i] == null) continue;
+            Instantiate(plateData.cakeSlices[i], Vector3.zero, Quaternion.Euler(Vector3.up * 45f * i),  transform);
+        }
     }
 
     public void OnDrag(Vector3 targetPosition)
     {
-        // Move the plate to the target position
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 10);
+        transform.position = targetPosition;
     }
 
-    public void OnDragBegan()
-    {
-
-    }
+    public void OnDragBegan(){}
 
     public void OnDragEnded()
     {

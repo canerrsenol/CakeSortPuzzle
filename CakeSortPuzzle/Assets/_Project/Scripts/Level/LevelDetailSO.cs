@@ -5,5 +5,5 @@ using UnityEngine;
 public class LevelDetailSO : ScriptableObject
 {
     public GameObject LevelPrefab;
-    public List<Plate> LevelPlates;
+    public List<PlateData> LevelPlates;
 }

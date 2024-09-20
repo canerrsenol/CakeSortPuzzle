@@ -6,6 +6,7 @@ public class DragController : MonoBehaviour
     [SerializeField] private LayerMask draggableLayer;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Vector3 dragOffset;
+    [SerializeField] private float dragSpeed = 5f;
     private IDraggable draggable;
 
     private void OnEnable()
