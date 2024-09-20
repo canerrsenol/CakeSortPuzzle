@@ -5,4 +5,6 @@ using UnityEngine;
 public class GlobalEventsSO : ScriptableObject
 {
     public Action<Tile> OnPlatePlaced;
+
+    public Action PlateCakeSlicesMerged;
 }

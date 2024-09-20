@@ -14,11 +14,26 @@ public class Plate : MonoBehaviour, IDraggable
 
     private CakeSlice[] cakeSlices = new CakeSlice[8];
 
+    private Tile placedTile;
+
+    public Tile PlacedTile => placedTile;
+
     public void InitializePlate(PlateData plateData, Vector3 initialPosition)
     {
         this.initialPosition = initialPosition;
         transform.DOMove(initialPosition, 0.25f);
         SpawnCakeSlices(plateData);
+    }
+
+    public bool HasCakeType(CakeSliceType cakeSliceType)
+    {
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == null) continue;
+            if (cakeSlices[i].CakeSliceType == cakeSliceType) return true;
+        }
+
+        return false;
     }
 
     private void SpawnCakeSlices(PlateData plateData)
@@ -110,22 +125,22 @@ public class Plate : MonoBehaviour, IDraggable
 
     public void ReorderCakeSlices()
     {
+        // If all cake slices are null, then the plate is empty and should be destroyed
         if (cakeSlices.All(cakeSlice => cakeSlice == null))
         {
-            var gridManager = GridManager.Instance;
-            var tilePosition = gridManager.GetTilePosition(transform.position);
-            gridManager.GetTile(tilePosition).SetTileObject(null);
+            placedTile.SetTileObject(null);
             Destroy(gameObject);
             return;
         }
 
-        // 1. CakeSlice nesnelerini türlerine göre gruplandır ve sıralı bir liste oluştur
+        // Order the cake slices by their type
         var groupedCakeSlices = cakeSlices
             .Where(cakeSlice => cakeSlice != null)
             .OrderBy(cakeSlice => cakeSlice.CakeSliceType)
             .ToList();
 
-        // 2. Bu listeyi cakeSlices dizisine yeniden yerleştir
+
+        // Set the ordered cake slices list to the array
         for (int i = 0; i < cakeSlices.Length; i++)
         {
             if (i < groupedCakeSlices.Count)
@@ -138,19 +153,17 @@ public class Plate : MonoBehaviour, IDraggable
             }
         }
 
-        // 3. Her bir CakeSlice nesnesinin pozisyonunu ve rotasyonunu kontrol et ve DoTween kullanarak ayarla
+        // Animate the cake slices to their new positions
         for (int i = 0; i < cakeSlices.Length; i++)
         {
             var cakeSlice = cakeSlices[i];
             if (cakeSlice != null)
             {
-                // Pozisyonu kontrol et ve ayarla
                 if (cakeSlice.transform.localPosition != Vector3.zero)
                 {
                     cakeSlice.transform.DOLocalMove(Vector3.zero, 1f).SetEase(Ease.Linear);
                 }
 
-                // Rotasyonu kontrol et ve ayarla
                 Quaternion targetRotation = Quaternion.Euler(Vector3.up * 45f * i);
                 if (cakeSlice.transform.localRotation != targetRotation)
                 {
@@ -189,6 +202,7 @@ public class Plate : MonoBehaviour, IDraggable
                 transform.DOMove(gridBaseInstance.GetWorldPosition(tilePosition), 0.25f).OnComplete(()
                 =>
                 {
+                    placedTile = tile;
                     tile.SetTileObject(gameObject);
                     globalEventsSO.OnPlatePlaced?.Invoke(tile);
                 });
