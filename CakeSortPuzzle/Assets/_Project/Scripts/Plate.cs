@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class Plate : MonoBehaviour, IDraggable, ITileObject
+public class Plate : MonoBehaviour, IDraggable
 {
+    [SerializeField] private GlobalEventsSO globalEventsSO;
     [SerializeField] private LayerMask groundLayer;
 
     private Vector3 initialPosition;
@@ -22,13 +24,37 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
     {
         for (int i = 0; i < plateData.cakeSlices.Length; i++)
         {
-            if(plateData.cakeSlices[i] == null) continue;
+            if (plateData.cakeSlices[i] == null) continue;
             GameObject cakeSlice = Instantiate(plateData.cakeSlices[i].cakeSlicePrefab, Vector3.zero, Quaternion.Euler(Vector3.up * 45f * i), transform);
             cakeSlice.transform.localPosition = Vector3.zero;
-            
+
             cakeSlices[i] = cakeSlice.GetComponent<CakeSlice>();
             cakeSlices[i].SetCakeSliceType(plateData.cakeSlices[i].cakeSliceType);
         }
+    }
+
+    public List<CakeSliceType> GetAllCakeSliceTypes()
+    {
+        List<CakeSliceType> cakeSliceTypes = new List<CakeSliceType>();
+        for (int i = 0; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == null) continue;
+            cakeSliceTypes.Add(cakeSlices[i].CakeSliceType);
+        }
+
+        return cakeSliceTypes;
+    }
+
+    public bool IsPlateAllSameType()
+    {
+        CakeSliceType firstCakeSliceType = cakeSlices[0].CakeSliceType;
+        for (int i = 1; i < cakeSlices.Length; i++)
+        {
+            if (cakeSlices[i] == null) return false;
+            if (cakeSlices[i].CakeSliceType != firstCakeSliceType) return false;
+        }
+
+        return true;
     }
 
     public void OnDrag(Vector3 targetPosition)
@@ -36,7 +62,7 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
         transform.position = targetPosition;
     }
 
-    public void OnDragBegan(){}
+    public void OnDragBegan() { }
 
     public void OnDragEnded()
     {
@@ -45,19 +71,24 @@ public class Plate : MonoBehaviour, IDraggable, ITileObject
         // Raycast to the ground layer get the tile position get the tile object from the tile and place the plate
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            var gridBaseInstance = GridBase.Instance;
+            var gridBaseInstance = GridManager.Instance;
 
             var tilePosition = gridBaseInstance.GetTilePosition(hit.point);
-            if(!gridBaseInstance.IsValidTilePosition(tilePosition)){
+            if (!gridBaseInstance.IsValidTilePosition(tilePosition))
+            {
                 transform.DOMove(initialPosition, 0.25f).OnComplete(() => CanDrag = true);
                 return;
-            } 
+            }
             var tile = gridBaseInstance.GetTile(tilePosition);
 
-            if(tile.IsTileEmpty())
+            if (tile.IsTileEmpty())
             {
-                tile.SetTileObject(this);
-                transform.DOMove(gridBaseInstance.GetWorldPosition(tilePosition), 0.25f);
+                transform.DOMove(gridBaseInstance.GetWorldPosition(tilePosition), 0.25f).OnComplete(()
+                =>
+                {
+                    tile.SetTileObject(gameObject);
+                    globalEventsSO.OnPlatePlaced?.Invoke(tile);
+                });
             }
             else
             {

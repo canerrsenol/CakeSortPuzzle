@@ -32,7 +32,7 @@ public class GridLevelCreator : MonoBehaviour
         if (GridParent == null)
         {
             GameObject gridParent = new GameObject("GridBase");
-            gridParent.gameObject.AddComponent<GridBase>().SetGridSettings(gridSize, tileSize);
+            gridParent.gameObject.AddComponent<GridManager>().SetGridSettings(gridSize, tileSize);
             GridParent = gridParent;
         }
         
@@ -75,7 +75,7 @@ public class GridLevelCreator : MonoBehaviour
     {
         UpdateAllTilesPosition();
         UpdateAllTileObjectsPosition();
-        if(GridParent != null) GridParent.GetComponent<GridBase>().SetGridSettings(gridSize, tileSize);
+        if(GridParent != null) GridParent.GetComponent<GridManager>().SetGridSettings(gridSize, tileSize);
     }
 
     public void UpdateAllTilesPosition()

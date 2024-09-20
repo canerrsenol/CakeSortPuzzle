@@ -4,7 +4,7 @@ public class Tile : MonoBehaviour
 {
     private TilePosition tilePosition;
     
-    private ITileObject tileObject;
+    private GameObject tileObject;
     
     public void SetTilePosition(TilePosition tilePosition)
     {
@@ -16,12 +16,12 @@ public class Tile : MonoBehaviour
         return tilePosition;
     }
     
-    public void SetTileObject(ITileObject tileObject)
+    public void SetTileObject(GameObject tileObject)
     {
         this.tileObject = tileObject;
     }
     
-    public ITileObject GetTileObject()
+    public GameObject GetTileObject()
     {
         return tileObject;
     }

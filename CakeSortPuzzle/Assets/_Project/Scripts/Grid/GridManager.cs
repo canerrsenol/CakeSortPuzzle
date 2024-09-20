@@ -3,7 +3,7 @@ using System.Linq;
 using Blended;
 using UnityEngine;
 
-public class GridBase : MonoSingleton<GridBase>
+public class GridManager : MonoSingleton<GridManager>
 {
     [SerializeField, HideInInspector] private Vector2Int gridSize;
     [SerializeField, HideInInspector] private float tileSize;
@@ -41,10 +41,7 @@ public class GridBase : MonoSingleton<GridBase>
                 if (Physics.Raycast(worldPosition + Vector3.down * raycastOffsetDistance,
                         Vector3.up, out RaycastHit raycastHit, raycastOffsetDistance * 2))
                 {
-                    if(raycastHit.collider.TryGetComponent(out ITileObject tileObject))
-                    {
-                        tilesArray[x, z].SetTileObject(tileObject);
-                    }
+                    tilesArray[x, z].SetTileObject(raycastHit.collider.gameObject);
                 }
             }
         }
