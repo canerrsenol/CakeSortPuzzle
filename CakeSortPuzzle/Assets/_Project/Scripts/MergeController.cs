@@ -44,7 +44,6 @@ public class MergeController : MonoBehaviour
         if(state == GameState.LevelLoaded)
         {
             sortedPlateCount = 0;
-
         }
     }
 
@@ -124,24 +123,25 @@ public class MergeController : MonoBehaviour
         if (checkTiles.Count > 0) { CheckForMerge(); }
     }
 
-    private void Merge(Plate currentPlate, Plate targetPlate, CakeSliceType cakeSliceType)
+    private void Merge(Plate from, Plate to, CakeSliceType cakeSliceType)
     {
-        List<CakeSlice> cakeSlices = currentPlate.GetAllCakeSlicesOfTargetType(cakeSliceType);
+        List<CakeSlice> cakeSlices = from.GetAllCakeSlicesOfTargetType(cakeSliceType);
 
         for (int i = 0; i < cakeSlices.Count; i++)
         {
-            if (targetPlate.HasEmptySlot())
+            if (to.HasEmptySlot())
             {
-                targetPlate.AddCakeSlice(cakeSlices[i]);
-                currentPlate.RemoveCakeSlice(cakeSlices[i]);
+                to.AddCakeSlice(cakeSlices[i]);
+                from.RemoveCakeSlice(cakeSlices[i]);
             }
             else
             {
                 return;
             }
 
-            targetPlate.ReorderCakeSlices();
-            DOVirtual.DelayedCall(.5f, currentPlate.ReorderCakeSlices);
+            // First reorder the target plate then reorder the source plate
+            to.ReorderCakeSlices();
+            DOVirtual.DelayedCall(.25f, from.ReorderCakeSlices);
         }
     }
 

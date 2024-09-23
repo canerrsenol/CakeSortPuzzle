@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
             case GameState.LevelDefeated:
                 losePanel.SetActive(true);
                 break;
-            default:
+            case GameState.LevelLoaded:
                 victoryPanel.SetActive(false);
                 losePanel.SetActive(false);
                 break;
