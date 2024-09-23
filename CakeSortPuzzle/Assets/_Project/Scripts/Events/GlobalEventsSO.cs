@@ -6,5 +6,9 @@ public class GlobalEventsSO : ScriptableObject
 {
     public Action<Tile> OnPlatePlaced;
 
-    public Action PlateCakeSlicesMerged;
+    public Action OnPlateSorted;
+
+    public Action OnMergeAnimationCompleted;
+
+    public Action<Plate> OnPlateDestroyed;
 }

@@ -1324,6 +1324,7 @@ GameObject:
   - component: {fileID: 1571499210}
   - component: {fileID: 1571499212}
   - component: {fileID: 1571499211}
+  - component: {fileID: 1571499213}
   m_Layer: 5
   m_Name: ui_tmp_move
   m_TagString: Untagged
@@ -1371,7 +1372,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Moves : 5'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b65874a4a730239448bd7d9e12dec5c6, type: 2}
   m_sharedMaterial: {fileID: 3642336560399813852, guid: b65874a4a730239448bd7d9e12dec5c6, type: 2}
@@ -1448,6 +1449,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571499209}
   m_CullTransparentMesh: 1
+--- !u!114 &1571499213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571499209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a9d5033676482642b40326b30858775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortedPlateCounterText: {fileID: 1571499211}
+  globalEventsSO: {fileID: 11400000, guid: db0bdee4f5536a34eb669e9a074321b7, type: 2}
 --- !u!1 &1687258581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,9 +1875,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelList:
-  - {fileID: 11400000, guid: 4583c1a1d23f2fa49ae278000fd07c59, type: 2}
-  - {fileID: 11400000, guid: 4583c1a1d23f2fa49ae278000fd07c59, type: 2}
-  - {fileID: 11400000, guid: 4583c1a1d23f2fa49ae278000fd07c59, type: 2}
+  - {fileID: 11400000, guid: 1b630aece8a63d7439af6561ee35566c, type: 2}
+  - {fileID: 11400000, guid: 1b630aece8a63d7439af6561ee35566c, type: 2}
+  - {fileID: 11400000, guid: 1b630aece8a63d7439af6561ee35566c, type: 2}
 --- !u!114 &2028843642
 MonoBehaviour:
   m_ObjectHideFlags: 0

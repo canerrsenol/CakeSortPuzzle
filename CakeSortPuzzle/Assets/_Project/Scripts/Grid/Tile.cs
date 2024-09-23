@@ -3,8 +3,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     private TilePosition tilePosition;
-    
-    private GameObject tileObject;
+    private Plate plate;
     
     public void SetTilePosition(TilePosition tilePosition)
     {
@@ -16,18 +15,18 @@ public class Tile : MonoBehaviour
         return tilePosition;
     }
     
-    public void SetTileObject(GameObject tileObject)
+    public void SetTilePlate(Plate tileObject)
     {
-        this.tileObject = tileObject;
+        this.plate = tileObject;
     }
     
-    public GameObject GetTileObject()
+    public Plate GetTilePlate()
     {
-        return tileObject;
+        return plate;
     }
     
     public bool IsTileEmpty()
     {
-        return tileObject == null;
+        return plate == null;
     }
 }

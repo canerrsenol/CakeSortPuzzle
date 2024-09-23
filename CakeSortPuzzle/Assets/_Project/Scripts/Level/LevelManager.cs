@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoSingleton<LevelManager>
 {
     private int levelNumber;
-    private LevelDetailSO currentLevelDetail;
-    public LevelDetailSO CurrentLevelDetail => currentLevelDetail;
-    [SerializeField] private LevelDetailSO[] levelList;
+    private LevelDataSO currentLevelData;
+    public LevelDataSO CurrentLevelData => currentLevelData;
+    [SerializeField] private LevelDataSO[] levelList;
     private GameObject levelContent;
     public GameObject LevelContent => levelContent;
 
@@ -20,7 +20,7 @@ public class LevelManager : MonoSingleton<LevelManager>
         LoadLevelData();
         CreateContent();
 
-        GameManager.Instance.ChangeGameState(GameState.Loaded);
+        GameManager.Instance.ChangeGameState(GameState.LevelLoaded);
     }
 
     public void LoadCurrentLevel()
@@ -60,7 +60,7 @@ public class LevelManager : MonoSingleton<LevelManager>
 
     private void CreateContent()
     {
-        currentLevelDetail = levelList[levelNumber%levelList.Length - 1];
-        levelContent = Instantiate(currentLevelDetail.LevelPrefab, transform);
+        currentLevelData = levelList[levelNumber % levelList.Length - 1];
+        levelContent = Instantiate(currentLevelData.LevelPrefab, transform);
     }
 }

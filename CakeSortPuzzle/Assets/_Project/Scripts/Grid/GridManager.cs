@@ -24,27 +24,6 @@ public class GridManager : MonoSingleton<GridManager>
                 tiles.RemoveAt(0);
             }
         }
-        
-        SetTileObjects();
-    }
-
-    private void SetTileObjects()
-    {
-        for (int x = 0; x < gridSize.x; x++)
-        {
-            for (int z = 0; z < gridSize.y; z++)
-            {
-                TilePosition tilePosition = new TilePosition(x, z);
-                Vector3 worldPosition = GetWorldPosition(tilePosition);
-                float raycastOffsetDistance = 5f;
-                 
-                if (Physics.Raycast(worldPosition + Vector3.down * raycastOffsetDistance,
-                        Vector3.up, out RaycastHit raycastHit, raycastOffsetDistance * 2))
-                {
-                    tilesArray[x, z].SetTileObject(raycastHit.collider.gameObject);
-                }
-            }
-        }
     }
 
     public void SetGridSettings(Vector2Int gridSize, float tileSize)

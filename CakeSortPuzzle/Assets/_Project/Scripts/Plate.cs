@@ -17,6 +17,7 @@ public class Plate : MonoBehaviour, IDraggable
     private Tile placedTile;
 
     public Tile PlacedTile => placedTile;
+    private bool plateSorted;
 
     public void InitializePlate(PlateData plateData, Vector3 initialPosition)
     {
@@ -63,10 +64,13 @@ public class Plate : MonoBehaviour, IDraggable
 
     public bool IsPlateAllSameType()
     {
-        CakeSliceType firstCakeSliceType = cakeSlices[0].CakeSliceType;
+        CakeSliceType firstCakeSliceType;
+        if(cakeSlices[0] != null) firstCakeSliceType = cakeSlices[0].CakeSliceType;
+        else return false;
+
         for (int i = 1; i < cakeSlices.Length; i++)
         {
-            if (cakeSlices[i] == null) return false;
+            if (cakeSlices[i] == null) continue;
             if (cakeSlices[i].CakeSliceType != firstCakeSliceType) return false;
         }
 
@@ -128,8 +132,9 @@ public class Plate : MonoBehaviour, IDraggable
         // If all cake slices are null, then the plate is empty and should be destroyed
         if (cakeSlices.All(cakeSlice => cakeSlice == null))
         {
-            placedTile.SetTileObject(null);
-            Destroy(gameObject);
+            placedTile.SetTilePlate(null);
+            globalEventsSO.OnPlateDestroyed?.Invoke(this);
+            Destroy(gameObject, .5f);
             return;
         }
 
@@ -154,6 +159,8 @@ public class Plate : MonoBehaviour, IDraggable
         }
 
         // Animate the cake slices to their new positions
+        var sequence = DOTween.Sequence();
+
         for (int i = 0; i < cakeSlices.Length; i++)
         {
             var cakeSlice = cakeSlices[i];
@@ -161,15 +168,42 @@ public class Plate : MonoBehaviour, IDraggable
             {
                 if (cakeSlice.transform.localPosition != Vector3.zero)
                 {
-                    cakeSlice.transform.DOLocalMove(Vector3.zero, 1f).SetEase(Ease.Linear);
+                    sequence.Append(cakeSlice.transform.DOLocalMove(Vector3.zero, .15f).SetEase(Ease.Linear));
                 }
 
                 Quaternion targetRotation = Quaternion.Euler(Vector3.up * 45f * i);
                 if (cakeSlice.transform.localRotation != targetRotation)
                 {
-                    cakeSlice.transform.DOLocalRotateQuaternion(targetRotation, 1f).SetEase(Ease.Linear);
+                    sequence.Join(cakeSlice.transform.DOLocalRotateQuaternion(targetRotation, .15f).SetEase(Ease.Linear));
                 }
             }
+        }
+
+        sequence.AppendInterval(.5f);
+        sequence.OnComplete(() =>
+        {
+            CheckForSort();
+            globalEventsSO.OnMergeAnimationCompleted?.Invoke();
+        });
+    }
+
+    private void CheckForSort()
+    {
+        // Check if the plate is all same type and merge if possible
+        if (IsPlateAllSameType() && !HasEmptySlot() && !plateSorted)
+        {
+            plateSorted = true;
+            globalEventsSO.OnPlateDestroyed?.Invoke(this);
+            globalEventsSO.OnPlateSorted?.Invoke();
+            placedTile.SetTilePlate(null);
+            // Do scale up and down animation with dotween then destroy the plate
+            transform.DOScale(Vector3.zero, .75f)
+                .SetEase(Ease.OutBack)
+                .OnComplete(() =>
+                {
+                    transform.DOKill();
+                    Destroy(gameObject);
+                });
         }
     }
 
@@ -203,7 +237,7 @@ public class Plate : MonoBehaviour, IDraggable
                 =>
                 {
                     placedTile = tile;
-                    tile.SetTileObject(gameObject);
+                    tile.SetTilePlate(this);
                     globalEventsSO.OnPlatePlaced?.Invoke(tile);
                 });
             }

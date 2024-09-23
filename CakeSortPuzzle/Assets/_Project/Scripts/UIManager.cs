@@ -19,10 +19,10 @@ public class UIManager : MonoBehaviour
     {
         switch (gameState)
         {
-            case GameState.Victory:
+            case GameState.LevelVictory:
                 victoryPanel.SetActive(true);
                 break;
-            case GameState.Lose:
+            case GameState.LevelDefeated:
                 losePanel.SetActive(true);
                 break;
             default:

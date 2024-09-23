@@ -10,44 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee9228e13f2246e4992cc9d1b2256626, type: 3}
-  m_Name: Level1
+  m_Name: Level 1
   m_EditorClassIdentifier: 
   LevelPrefab: {fileID: 2167922724565707146, guid: 43e424b8a18020c49b97b08cd71e787d, type: 3}
   LevelPlates:
   - cakeSlices:
-    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
-    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
-    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
-    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - cakeSlices:
     - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
     - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
     - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
-    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
-    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
   - cakeSlices:
     - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
     - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
-    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
   - cakeSlices:
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
     - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
     - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
     - {fileID: 0}
     - {fileID: 0}
   - cakeSlices:
@@ -62,9 +53,46 @@ MonoBehaviour:
   - cakeSlices:
     - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
     - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
-    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - cakeSlices:
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - cakeSlices:
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - cakeSlices:
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
+    - {fileID: 11400000, guid: 4e63c5376d9f2dc49a63e4873ce8d1cf, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 11400000, guid: 6b5834f44af67834db13f8833a174955, type: 2}
+    - {fileID: 0}
+  - cakeSlices:
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 11400000, guid: bbb0cfd3e45076e47a328ed924104f9c, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  TargetSortPlateCount: 3

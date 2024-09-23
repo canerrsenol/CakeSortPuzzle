@@ -11,7 +11,7 @@ public class ConveyorController : MonoBehaviour
     private int currentCycle = 0;
     private int currentSpawnIndex = 0;
 
-    private LevelDetailSO levelData;
+    private LevelDataSO levelData;
 
     private LevelManager levelManager;
 
@@ -47,9 +47,9 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGameStateChanged(GameState gameState)
     {
-        if (gameState == GameState.Loaded)
+        if (gameState == GameState.LevelLoaded)
         {
-            levelData = levelManager.CurrentLevelDetail;
+            levelData = levelManager.CurrentLevelData;
             DOVirtual.DelayedCall(1f , SpawnPlates);
         }
     }

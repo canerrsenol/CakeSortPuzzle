@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class GameManager : MonoSingleton<GameManager>
 {
     private GameState GameState;
@@ -18,8 +16,8 @@ public class GameManager : MonoSingleton<GameManager>
 public enum GameState
 {
     None,
-    Loaded,
-    Playing,
-    Victory,
-    Lose
+    LevelLoaded,
+    LevelStarted,
+    LevelVictory,
+    LevelDefeated
 }
