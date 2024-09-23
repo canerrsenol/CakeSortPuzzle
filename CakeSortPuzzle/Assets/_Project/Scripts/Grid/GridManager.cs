@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Blended;
 using UnityEngine;
 
 public class GridManager : MonoSingleton<GridManager>
@@ -51,6 +50,11 @@ public class GridManager : MonoSingleton<GridManager>
     public Tile GetTile(TilePosition tilePosition)
     {
         return tilesArray[tilePosition.x, tilePosition.z];
+    }
+
+    public int GetTileCount()
+    {
+        return gridSize.x * gridSize.y;
     }
     
     public bool IsValidTilePosition(TilePosition tilePosition)

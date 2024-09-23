@@ -58,7 +58,7 @@ public class LevelManager : MonoSingleton<LevelManager>
 
     private void CreateContent()
     {
-        currentLevelData = levelList[levelNumber % levelList.Length - 1];
+        currentLevelData = levelList[levelNumber % (levelList.Length - 1)];
         levelContent = Instantiate(currentLevelData.LevelPrefab, transform);
         GameManager.Instance.ChangeGameState(GameState.LevelLoaded);
     }

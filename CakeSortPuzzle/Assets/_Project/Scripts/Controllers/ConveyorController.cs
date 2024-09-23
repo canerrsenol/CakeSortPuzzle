@@ -23,14 +23,14 @@ public class ConveyorController : MonoBehaviour
     private void OnEnable()
     {
         GameManager.Instance.OnGameStateChanged += OnGameStateChanged;
-        globalEvents.OnPlatePlaced += CheckNewSpawnCycle;
+        globalEvents.OnPlatePlacedOnTile += CheckNewSpawnCycle;
     }
 
     private void OnDisable()
     {
         if(GameManager.Instance == null) return;
         GameManager.Instance.OnGameStateChanged -= OnGameStateChanged;
-        globalEvents.OnPlatePlaced -= CheckNewSpawnCycle;
+        globalEvents.OnPlatePlacedOnTile -= CheckNewSpawnCycle;
     }
 
     private void CheckNewSpawnCycle(Tile tile)
@@ -49,6 +49,8 @@ public class ConveyorController : MonoBehaviour
     {
         if (gameState == GameState.LevelLoaded)
         {
+            currentCycle = 0;
+            currentSpawnIndex = 0;
             levelData = levelManager.CurrentLevelData;
             DOVirtual.DelayedCall(1f , SpawnPlates);
         }

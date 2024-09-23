@@ -238,7 +238,7 @@ public class Plate : MonoBehaviour, IDraggable
                 {
                     placedTile = tile;
                     tile.SetTilePlate(this);
-                    globalEventsSO.OnPlatePlaced?.Invoke(tile);
+                    globalEventsSO.OnPlatePlacedOnTile?.Invoke(tile);
                 });
             }
             else
