@@ -168,18 +168,18 @@ public class Plate : MonoBehaviour, IDraggable
             {
                 if (cakeSlice.transform.localPosition != Vector3.zero)
                 {
-                    sequence.Append(cakeSlice.transform.DOLocalMove(Vector3.zero, .15f).SetEase(Ease.Linear));
+                    sequence.Append(cakeSlice.transform.DOLocalMove(Vector3.zero, .2f).SetEase(Ease.Linear));
                 }
 
                 Quaternion targetRotation = Quaternion.Euler(Vector3.up * 45f * i);
                 if (cakeSlice.transform.localRotation != targetRotation)
                 {
-                    sequence.Join(cakeSlice.transform.DOLocalRotateQuaternion(targetRotation, .15f).SetEase(Ease.Linear));
+                    sequence.Join(cakeSlice.transform.DOLocalRotateQuaternion(targetRotation, .2f).SetEase(Ease.Linear));
                 }
             }
         }
 
-        sequence.AppendInterval(.5f);
+        sequence.AppendInterval(.75f);
         sequence.OnComplete(() =>
         {
             CheckForSort();
