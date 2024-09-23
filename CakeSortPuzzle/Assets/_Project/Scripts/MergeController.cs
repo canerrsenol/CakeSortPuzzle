@@ -26,7 +26,7 @@ public class MergeController : MonoBehaviour
     private void OnEnable()
     {
         gameManager.OnGameStateChanged += OnGameStateChanged;
-        globalEventsSO.OnPlatePlacedOnTile += OnPlatePlaced;
+        globalEventsSO.OnPlatePlacedOnTile += OnPlatePlacedOnTile;
         globalEventsSO.OnPlateSorted += OnPlateSorted;
         globalEventsSO.OnMergeAnimationCompleted += CheckForMerge;
         globalEventsSO.OnPlateDestroyed += OnPlateDestroyed;
@@ -35,7 +35,7 @@ public class MergeController : MonoBehaviour
     private void OnDisable()
     {
         gameManager.OnGameStateChanged -= OnGameStateChanged;
-        globalEventsSO.OnPlatePlacedOnTile -= OnPlatePlaced;
+        globalEventsSO.OnPlatePlacedOnTile -= OnPlatePlacedOnTile;
         globalEventsSO.OnPlateSorted -= OnPlateSorted;
         globalEventsSO.OnMergeAnimationCompleted -= CheckForMerge;
         globalEventsSO.OnPlateDestroyed -= OnPlateDestroyed;
@@ -43,7 +43,7 @@ public class MergeController : MonoBehaviour
 
     private void OnGameStateChanged(GameState state)
     {
-        if(state == GameState.LevelLoaded)
+        if (state == GameState.LevelLoaded)
         {
             sortedPlateCount = 0;
         }
@@ -52,22 +52,22 @@ public class MergeController : MonoBehaviour
     private void OnPlateSorted()
     {
         sortedPlateCount++;
-        if(sortedPlateCount == levelManager.CurrentLevelData.TargetSortPlateCount)
+        if (sortedPlateCount == levelManager.CurrentLevelData.TargetSortPlateCount)
         {
-            gameManager.ChangeGameState(GameState.LevelVictory);
+            DOVirtual.DelayedCall(1f, () => gameManager.ChangeGameState(GameState.LevelVictory));
         }
     }
 
     private void OnPlateDestroyed(Plate plate)
     {
         activePlates.Remove(plate);
-        if(checkTiles.Count > 0 && checkTiles.Contains(plate.PlacedTile))
+        if (checkTiles.Count > 0 && checkTiles.Contains(plate.PlacedTile))
         {
             checkTiles.Remove(plate.PlacedTile);
         }
     }
 
-    private void OnPlatePlaced(Tile tile)
+    private void OnPlatePlacedOnTile(Tile tile)
     {
         activePlates.Add(tile.GetTilePlate());
         checkTiles.Add(tile);
@@ -80,18 +80,20 @@ public class MergeController : MonoBehaviour
 
         Tile checkTile = checkTiles.Last();
         Plate currentPlate = checkTile.GetTilePlate();
-        var neighbourPlates = GetNeighbourPlates(checkTile);
+
+        var neighbourTiles = GridManager.Instance.GetNeighbourTiles(checkTile);
+        var neighbourPlates = neighbourTiles.Select(tile => tile.GetTilePlate()).ToList();
 
         List<CakeSliceType> currentPlateCakeSliceTypes = currentPlate.GetAllCakeSliceTypes();
-        if(currentPlateCakeSliceTypes.Count == 0) { checkTiles.Remove(checkTile); return; }
+        if (currentPlateCakeSliceTypes.Count == 0) { checkTiles.Remove(checkTile); return; }
         CakeSliceType currentCakeType = currentPlateCakeSliceTypes[0];
 
         // Check if the current plate same type and search for the same type in neighbour plates
-        if(currentPlate.IsPlateAllSameType())
+        if (currentPlate.IsPlateAllSameType())
         {
-            for (int i = 0; i < neighbourPlates.Count; i++)
+            for (int i = 0; i < neighbourTiles.Count; i++)
             {
-                if(neighbourPlates[i].HasCakeType(currentCakeType))
+                if (neighbourPlates[i].HasCakeType(currentCakeType))
                 {
                     Merge(neighbourPlates[i], currentPlate, currentCakeType);
                     return;
@@ -99,10 +101,10 @@ public class MergeController : MonoBehaviour
             }
         }
 
-        // Check if the neighbour plates are same type and search for the same type in current plate
-        for(int j= 0; j< currentPlateCakeSliceTypes.Count; j++)
+        // Check if the neighbour plates are all same type and search for the same type in current plate
+        for (int j = 0; j < currentPlateCakeSliceTypes.Count; j++)
         {
-            for (int i = 0; i < neighbourPlates.Count; i++)
+            for (int i = 0; i < neighbourTiles.Count; i++)
             {
                 if (neighbourPlates[i].IsPlateAllSameType() && neighbourPlates[i].HasCakeType(currentPlateCakeSliceTypes[j]))
                 {
@@ -110,6 +112,14 @@ public class MergeController : MonoBehaviour
                     checkTiles.Add(neighbourPlates[i].PlacedTile);
                     return;
                 }
+            }
+        }
+
+        // Check if the neighbour plates have the same type and search for the same type in current plate
+        for (int j = 0; j < currentPlateCakeSliceTypes.Count; j++)
+        {
+            for (int i = 0; i < neighbourTiles.Count; i++)
+            {
                 if (neighbourPlates[i].HasCakeType(currentPlateCakeSliceTypes[j]))
                 {
                     Merge(currentPlate, neighbourPlates[i], currentPlateCakeSliceTypes[j]);
@@ -120,8 +130,9 @@ public class MergeController : MonoBehaviour
         }
 
         checkTiles.Remove(checkTile);
+        
         if (checkTiles.Count > 0) { CheckForMerge(); }
-        else { CheckForLose(); }
+        else { DOVirtual.DelayedCall(1f, CheckForLose); }
     }
 
     private void CheckForLose()
@@ -146,44 +157,12 @@ public class MergeController : MonoBehaviour
             }
             else
             {
-                return;
+                break;
             }
-
-            // First reorder the target plate then reorder the source plate
-            to.ReorderCakeSlices();
-            DOVirtual.DelayedCall(.25f, from.ReorderCakeSlices);
-        }
-    }
-
-    private List<Plate> GetNeighbourPlates(Tile currentTile)
-    {
-        GridManager gridSystem = GridManager.Instance;
-
-        List<Plate> neighbourList = new List<Plate>();
-        TilePosition gridPosition = currentTile.GetTilePosition();
-
-        List<TilePosition> neighbourOffsets = new List<TilePosition>
-        {
-            new TilePosition(-1, 0),  // Left
-            new TilePosition(1, 0),   // Right
-            new TilePosition(0, -1),  // Down
-            new TilePosition(0, 1),   // Up
-        };
-
-        foreach (TilePosition offset in neighbourOffsets)
-        {
-            TilePosition neighbourPosition = gridPosition + offset;
-            if (gridSystem.IsValidTilePosition(neighbourPosition))
-            {
-                Tile neighbourTile = gridSystem.GetTile(neighbourPosition);
-                if (!neighbourTile.IsTileEmpty())
-                {
-                    neighbourList.Add(neighbourTile.GetTilePlate());
-                }
-            }
-
         }
 
-        return neighbourList;
+        // reorder and animate
+        to.ReorderCakeSlices(true);
+        from.ReorderCakeSlices(false);
     }
 }

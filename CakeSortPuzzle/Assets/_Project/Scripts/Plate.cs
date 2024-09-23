@@ -127,14 +127,14 @@ public class Plate : MonoBehaviour, IDraggable
         }
     }
 
-    public void ReorderCakeSlices()
+    public void ReorderCakeSlices(bool shouldInvokeCallback)
     {
         // If all cake slices are null, then the plate is empty and should be destroyed
         if (cakeSlices.All(cakeSlice => cakeSlice == null))
         {
             placedTile.SetTilePlate(null);
             globalEventsSO.OnPlateDestroyed?.Invoke(this);
-            Destroy(gameObject, .5f);
+            Destroy(gameObject, 1.25f);
             return;
         }
 
@@ -179,11 +179,11 @@ public class Plate : MonoBehaviour, IDraggable
             }
         }
 
-        sequence.AppendInterval(.75f);
+        sequence.AppendInterval(1f);
         sequence.OnComplete(() =>
         {
             CheckForSort();
-            globalEventsSO.OnMergeAnimationCompleted?.Invoke();
+            if(shouldInvokeCallback) globalEventsSO.OnMergeAnimationCompleted?.Invoke();
         });
     }
 

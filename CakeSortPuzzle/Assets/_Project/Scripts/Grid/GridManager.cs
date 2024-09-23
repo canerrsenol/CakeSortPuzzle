@@ -64,4 +64,34 @@ public class GridManager : MonoSingleton<GridManager>
                tilePosition.z >= 0 && 
                tilePosition.z < gridSize.y;
     }
+
+    public List<Tile> GetNeighbourTiles(Tile currentTile)
+    {
+        List<Tile> neighbourList = new List<Tile>();
+        TilePosition gridPosition = currentTile.GetTilePosition();
+
+        List<TilePosition> neighbourOffsets = new List<TilePosition>
+        {
+            new TilePosition(-1, 0),  // Left
+            new TilePosition(1, 0),   // Right
+            new TilePosition(0, -1),  // Down
+            new TilePosition(0, 1),   // Up
+        };
+
+        foreach (TilePosition offset in neighbourOffsets)
+        {
+            TilePosition neighbourPosition = gridPosition + offset;
+            if (IsValidTilePosition(neighbourPosition))
+            {
+                Tile neighbourTile = GetTile(neighbourPosition);
+                if (!neighbourTile.IsTileEmpty())
+                {
+                    neighbourList.Add(neighbourTile);
+                }
+            }
+
+        }
+
+        return neighbourList;
+    }
 }
